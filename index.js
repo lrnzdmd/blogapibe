@@ -286,4 +286,4 @@ const updateCommentSchema = Joi.object({
   text: Joi.string().min(1).max(2500).required()
 });
 
-app.listen(3000, () => console.log('Server listening on port 3000'));
+app.listen(8000, () => console.log('Server listening on port 8000'));
