@@ -221,7 +221,7 @@ app.post('/register', verifyMW.validateRegistration, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     await database.createUser(req.body, hashedPassword);
-    return res.redirect('/register');
+    return res.status(200).json({message:'Account created successfully'});
   } catch (error) {
     console.error('Error creating account', error);
     return res.status(500).json({errorMsg:'Error creating account.', error});
