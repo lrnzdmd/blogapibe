@@ -87,7 +87,7 @@ async function getLatestPosts() {
     return popularPosts
   }
 
-async function getAllPosts() {
+  async function getAllPosts() {
     try {
         const posts = await prisma.post.findMany({
             where: {
@@ -100,6 +100,15 @@ async function getAllPosts() {
                 author: {
                     select: {
                         username: true
+                    }
+                },
+                comments: {
+                    include: {
+                        commenter: {
+                            select: {
+                                username: true
+                            }
+                        }
                     }
                 }
             }
