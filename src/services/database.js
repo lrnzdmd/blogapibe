@@ -87,19 +87,23 @@ async function getLatestPosts() {
     return popularPosts
   }
 
-async function getAllPosts(){
+async function getAllPosts() {
     try {
         const posts = await prisma.post.findMany({
+            where: {
+                isPublished: true,
+            },
             orderBy: {
                 createdAt: 'desc'
-              },
-              include: {
+            },
+            include: {
                 author: {
-                  select: {
-                    username: true
-                  },
-                },
-    }});
+                    select: {
+                        username: true
+                    }
+                }
+            }
+        });
         return posts;
     } catch (error) {
         console.error('Error fetching posts list', error);
