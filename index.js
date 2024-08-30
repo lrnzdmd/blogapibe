@@ -222,7 +222,7 @@ app.post('/api/admin/login', verifyMW.validateLogin, (req, res, next) => {
     if (err) {
       return next(err);
     }
-    if (!user || user.type !== 'admin') {
+    if (!user || user.type !== 'Admin') {
       return res.status(401).json({ message: 'Invalid credentials or insufficient privileges' });
     }
     const token = jwt.sign(
