@@ -89,7 +89,17 @@ async function getLatestPosts() {
 
 async function getAllPosts(){
     try {
-        const posts = await prisma.post.findMany();
+        const posts = await prisma.post.findMany({
+            orderBy: {
+                createdAt: 'desc'
+              },
+              include: {
+                author: {
+                  select: {
+                    username: true
+                  },
+                },
+    }});
         return posts;
     } catch (error) {
         console.error('Error fetching posts list', error);
