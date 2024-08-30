@@ -217,6 +217,23 @@ app.post('/login', verifyMW.validateLogin, (req, res, next) => {
   })(req,res,next);
 });
 
+app.post('/api/admin/login', verifyMW.validateLogin, (req, res, next) => {
+  passport.authenticate('local', { session: false }, (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user || user.type !== 'admin') {
+      return res.status(401).json({ message: 'Invalid credentials or insufficient privileges' });
+    }
+    const token = jwt.sign(
+      { id: user.id, username: user.username, type: user.type },
+      process.env.JWT_SECRET,
+      { expiresIn: '1 day' } 
+    );
+    return res.json({ token: token });
+  })(req, res, next);
+});
+
 app.post('/register', verifyMW.validateRegistration, async (req, res) => { 
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
