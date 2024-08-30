@@ -7,7 +7,6 @@ const bcrypt = require('bcryptjs');
 const database = require('./src/services/database');
 const verifyMW = require('./src/middlewares/validations')
 const LocalStrategy = require('passport-local').Strategy;
-const Joi = require('joi');
 require('dotenv').config();
 
 
@@ -252,38 +251,6 @@ function parseEditPostBody(formBody) {
     return updateData;
 }
 
-// Joi validation schemas for post and patch routes
 
-const registrationSchema = Joi.object({
-  username: Joi.string().min(3).max(30).required(),
-  password: Joi.string().min(6).required(),
-  eMail: Joi.string().email().required()
-});
-
-const loginSchema = Joi.object({
-  username: Joi.string().min(3).max(30).required(),
-  password: Joi.string().min(6).required()
-});
-
-const postSchema = Joi.object({
-  title: Joi.string().min(3).max(100).required(),
-  text: Joi.string().min(3).required(),
-  isPublished: Joi.boolean().optional()
-});
-
-const updatePostSchema = Joi.object({
-  title: Joi.string().min(3).max(100).optional(),
-  text: Joi.string().min(3).optional(),
-  isPublished: Joi.boolean().optional()
-});
-
-const commentSchema = Joi.object({
-  text: Joi.string().min(1).max(2500).required(),
-  parentId: Joi.number().integer().required()
-});
-
-const updateCommentSchema = Joi.object({
-  text: Joi.string().min(1).max(2500).required()
-});
 
 app.listen(8000, () => console.log('Server listening on port 8000'));

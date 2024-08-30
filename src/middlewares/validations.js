@@ -1,3 +1,5 @@
+const Joi = require('joi');
+
 // middlewares for authorization. might move to another module?
 
 
@@ -75,6 +77,40 @@ function verifyToken(req, res, next) {
     }
     next();
   };
+
+  // Joi validation schemas for post and patch routes
+
+const registrationSchema = Joi.object({
+  username: Joi.string().min(3).max(30).required(),
+  password: Joi.string().min(6).required(),
+  eMail: Joi.string().email().required()
+});
+
+const loginSchema = Joi.object({
+  username: Joi.string().min(3).max(30).required(),
+  password: Joi.string().min(6).required()
+});
+
+const postSchema = Joi.object({
+  title: Joi.string().min(3).max(100).required(),
+  text: Joi.string().min(3).required(),
+  isPublished: Joi.boolean().optional()
+});
+
+const updatePostSchema = Joi.object({
+  title: Joi.string().min(3).max(100).optional(),
+  text: Joi.string().min(3).optional(),
+  isPublished: Joi.boolean().optional()
+});
+
+const commentSchema = Joi.object({
+  text: Joi.string().min(1).max(2500).required(),
+  parentId: Joi.number().integer().required()
+});
+
+const updateCommentSchema = Joi.object({
+  text: Joi.string().min(1).max(2500).required()
+});
 
   module.exports = {
     validateLogin,
