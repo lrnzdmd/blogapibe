@@ -166,7 +166,7 @@ app.get('/api/posts/:postid/comments', async (req, res) => {
 
 
 
-app.post('/api/comments', verifyMW.verifyToken, verifyMW.validateComment, async (req, res) => {
+app.post('/api/comments/new/:postid', verifyMW.verifyToken, verifyMW.validateComment, async (req, res) => {
   const postId = parseInt(req.params.postid);
   const userId = req.token.id;
   try {
