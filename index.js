@@ -71,7 +71,7 @@ app.get('/api/posts', async (req, res) => {
   }
 });
 
-app.get('/api/posts/all', verifyMW.verifyToken,verifyMW.verifyAdmin, async (req, res) => {
+app.get('/api/posts/all', verifyMW.verifyToken, verifyMW.verifyAdmin, async (req, res) => {
   try {
     const posts = await database.getAllPostsUnpub();
     return res.json({posts:posts});
