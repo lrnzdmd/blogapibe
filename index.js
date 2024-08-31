@@ -138,6 +138,18 @@ app.patch('/api/posts/:postid', verifyMW.verifyToken, verifyMW.verifyAdmin, veri
   }
 })
 
+app.patch('/api/posts/:postid/publish', verifyMW.verifyToken, verifyMW.verifyAdmin, async (req, res) => {
+  const postId = parseInt(req.params.postid);
+try {
+  const publishedPost = await database.togglePublishPost(postId);
+  return res.json( {message: 'Post published successfully'});
+  
+} catch (error) {
+  console.error('Error updating post: ', error);
+  return res.status(500).json({error:'Error updating post.'})
+}
+})
+
 app.delete('/api/posts/:postid', verifyMW.verifyToken, verifyMW.verifyAdmin, async (req, res) => {
   const postId = parseInt(req.params.postid);
   try {

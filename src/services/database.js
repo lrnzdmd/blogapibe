@@ -193,6 +193,21 @@ async function updatePost(postId, data) {
     }
 }
 
+async function togglePublishPost(postId) {
+    try {
+        const post = await prisma.post.findUnique({where: {id: postId}});
+        const published = await prisma.post.update({
+            where: {id: postId},
+            data: {isPublished: !post.isPublished},
+        });
+        console.log('Post published status changed: ',post);
+        return post;
+    } catch {
+        console.error('Error updating post: ',error);
+        throw error;
+    }
+}
+
 async function deletePostById(postId) {
     try {
         const post = await prisma.post.delete({
@@ -270,6 +285,7 @@ async function deleteCommentById(commentId) {
 module.exports = { getUserByName,
                    getUserById, 
                    createUser,
+                   togglePublishPost,
                    getLatestPosts,
                    getPopularPosts,
                    getAllPosts,
