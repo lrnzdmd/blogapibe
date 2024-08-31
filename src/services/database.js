@@ -120,6 +120,36 @@ async function getLatestPosts() {
     }
 }
 
+async function getAllPostsUnpub() {
+    try {
+        const posts = await prisma.post.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            },
+            include: {
+                author: {
+                    select: {
+                        username: true
+                    }
+                },
+                comments: {
+                    include: {
+                        commenter: {
+                            select: {
+                                username: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return posts;
+    } catch (error) {
+        console.error('Error fetching posts list', error);
+        throw error;
+    }
+}
+
 async function getPostById(postId) {
     try {
         const post = await prisma.post.findUnique({
@@ -242,7 +272,8 @@ module.exports = { getUserByName,
                    createUser,
                    getLatestPosts,
                    getPopularPosts,
-                   getAllPosts, 
+                   getAllPosts,
+                   getAllPostsUnpub, 
                    getPostById,
                    createPost, 
                    updatePost, 

@@ -71,6 +71,16 @@ app.get('/api/posts', async (req, res) => {
   }
 });
 
+app.get('/api/posts/all', verifyMW.verifyToken,verifyMW.verifyAdmin, async (req, res) => {
+  try {
+    const posts = await database.getAllPostsUnpub();
+    return res.json({posts:posts});
+  } catch (error) {
+    console.error('Error fetching posts list');
+    return res.status(500).json({error:'Error fetching posts list'});
+  }
+});
+
 app.get('/api/posts/list/latest', async (req, res) => {
   try {
     const posts = await database.getLatestPosts();
@@ -223,7 +233,7 @@ app.post('/api/admin/login', verifyMW.validateLogin, (req, res, next) => {
       return next(err);
     }
     if (!user || user.type !== 'Admin') {
-      return res.status(401).json({ message: 'Invalid credentials or insufficient privileges' });
+      return res.status(401).json({ message: info.message });
     }
     const token = jwt.sign(
       { id: user.id, username: user.username, type: user.type },
